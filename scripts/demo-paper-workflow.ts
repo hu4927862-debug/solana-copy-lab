@@ -36,6 +36,7 @@ import {
   swapFixture,
 } from "../test/fixtures/mainnet-fixtures.js";
 import { envelope } from "../test/helpers/envelope.js";
+import type { EvaluationRequestFile } from "./evaluate-strategies.js";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const tokenRaw = 9_007_199_254_740_993n;
@@ -273,27 +274,23 @@ export async function runPaperWorkflow(
     database.close();
     const databaseHashBeforeReport = hash(databasePath);
     const endMs = Date.now() + 1;
-    const report = await runDeterministicEvidenceReport({
-      databasePath,
-      outputDirectory: resolve(outputDirectory, "report"),
-      repositoryCommit: repositoryHead(),
-      window: {
-        windowStartMs: startMs - policy.maxIntentAgeMs - 2_000,
-        windowEndMs: endMs,
-      },
-      expectedContext: {
-        window: {
-          fromMs: startMs - policy.maxIntentAgeMs - 2_000,
-          toMs: endMs,
-        },
-        source: "SYNTHETIC_PUBLIC_DEMO",
-        mode: "PAPER",
-        copyRatioBps: 10_000,
-        riskPolicyVersion: policy.policyVersion,
-        fillPolicyVersion: "JUPITER_ORDER_QUOTE_AS_FILL_V1",
-        accountingPolicyVersion: "WEIGHTED_AVERAGE_V1",
-        copyabilityDefinitionVersion: "COPYABILITY_V1",
-      },
+    const sourceRevision = repositoryHead();
+    const window = {
+      windowStartMs: startMs - policy.maxIntentAgeMs - 2_000,
+      windowEndMs: endMs,
+    };
+    const context = {
+      window: { fromMs: window.windowStartMs, toMs: window.windowEndMs },
+      source: "SYNTHETIC_PUBLIC_DEMO",
+      mode: "PAPER" as const,
+      copyRatioBps: 10_000,
+      riskPolicyVersion: policy.policyVersion,
+      fillPolicyVersion: "JUPITER_ORDER_QUOTE_AS_FILL_V1",
+      accountingPolicyVersion: "WEIGHTED_AVERAGE_V1",
+      copyabilityDefinitionVersion: "COPYABILITY_V1",
+    };
+    const evaluationOptions = {
+      repositoryCommit: sourceRevision,
       buckets: [
         {
           followerWallet: FOLLOWER,
@@ -311,18 +308,54 @@ export async function runPaperWorkflow(
         verdictPolicyPath,
         "utf8",
       ),
+    };
+    const report = await runDeterministicEvidenceReport({
+      ...evaluationOptions,
+      databasePath,
+      outputDirectory: resolve(outputDirectory, "report"),
+      window,
+      expectedContext: context,
     });
     if (hash(databasePath) !== databaseHashBeforeReport)
       throw new Error("REPORT_MUTATED_DATABASE");
     const verdict = report.report.evaluations[0]?.verdict.value;
     if (verdict !== "INSUFFICIENT_EVIDENCE")
       throw new Error("SYNTHETIC_EVIDENCE_VERDICT_INVALID");
+    const evaluationRequest: EvaluationRequestFile | undefined =
+      /^[0-9a-f]{40}$/.test(sourceRevision)
+        ? {
+            schema: "OFFLINE_EVALUATION_REQUEST_V1",
+            databasePath: "./paper.sqlite",
+            databaseSha256: databaseHashBeforeReport,
+            evidenceKind: "SYNTHETIC",
+            outputDirectory: "./re-evaluated",
+            repositoryCommit: sourceRevision,
+            ...window,
+            source: context.source,
+            mode: context.mode,
+            copyRatioBps: context.copyRatioBps,
+            riskPolicyVersion: context.riskPolicyVersion,
+            fillPolicyVersion: context.fillPolicyVersion,
+            accountingPolicyVersion: context.accountingPolicyVersion,
+            copyabilityDefinitionVersion: context.copyabilityDefinitionVersion,
+            buckets: evaluationOptions.buckets,
+            historicalEvaluationPolicyInputs:
+              evaluationOptions.historicalEvaluationPolicyInputs,
+            failureTaxonomyDefinitionVersion:
+              evaluationOptions.failureTaxonomyPolicy.definitionVersion,
+            temporalBlockCount: evaluationOptions.temporalBlockCount,
+          }
+        : undefined;
     const summary = {
       schema: "PUBLIC_PAPER_WORKFLOW_V1",
       mode: "SYNTHETIC_OFFLINE_PAPER",
       evidence:
         "All transactions and quote responses are synthetic. Paper ledger PnL is not finalized real net PnL or profitability evidence.",
-      sourceRevision: repositoryHead(),
+      sourceRevision,
+      evaluationRequestStatus:
+        evaluationRequest === undefined
+          ? "SOURCE_REVISION_UNAVAILABLE"
+          : "READY",
       entrypointSha256: hash(fileURLToPath(import.meta.url)),
       inputs: inputs.length,
       syntheticQuoteRequests: quotes.receipts.length,
@@ -366,6 +399,8 @@ export async function runPaperWorkflow(
         { flag: "wx" },
       );
     write("SUMMARY.json", summary);
+    if (evaluationRequest !== undefined)
+      write("EVALUATION-REQUEST.json", evaluationRequest);
     write("SYNTHETIC-INPUTS.json", { evidence: "SYNTHETIC", inputs });
     write("SYNTHETIC-QUOTES.json", {
       evidence: "SYNTHETIC",
@@ -373,6 +408,7 @@ export async function runPaperWorkflow(
     });
     const files = [
       "SUMMARY.json",
+      ...(evaluationRequest === undefined ? [] : ["EVALUATION-REQUEST.json"]),
       "SYNTHETIC-INPUTS.json",
       "SYNTHETIC-QUOTES.json",
       "paper.sqlite",

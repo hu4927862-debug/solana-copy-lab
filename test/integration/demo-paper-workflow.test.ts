@@ -73,6 +73,33 @@ describe("public synthetic paper workflow", () => {
       expect(existsSync(resolve(result.outputDirectory, "paper.sqlite"))).toBe(
         true,
       );
+      const requestPath = resolve(
+        result.outputDirectory,
+        "EVALUATION-REQUEST.json",
+      );
+      if (/^[0-9a-f]{40}$/.test(result.summary.sourceRevision)) {
+        expect(result.summary.evaluationRequestStatus).toBe("READY");
+        const evaluationRequest = JSON.parse(readFileSync(requestPath, "utf8"));
+        expect(evaluationRequest).toMatchObject({
+          schema: "OFFLINE_EVALUATION_REQUEST_V1",
+          evidenceKind: "SYNTHETIC",
+          mode: "PAPER",
+          repositoryCommit: result.summary.sourceRevision,
+          databasePath: "./paper.sqlite",
+          outputDirectory: "./re-evaluated",
+          databaseSha256: createHash("sha256")
+            .update(
+              readFileSync(resolve(result.outputDirectory, "paper.sqlite")),
+            )
+            .digest("hex"),
+        });
+      } else {
+        expect(result.summary.sourceRevision).toBe("UNKNOWN_SOURCE_REVISION");
+        expect(result.summary.evaluationRequestStatus).toBe(
+          "SOURCE_REVISION_UNAVAILABLE",
+        );
+        expect(existsSync(requestPath)).toBe(false);
+      }
     } finally {
       vi.unstubAllGlobals();
     }

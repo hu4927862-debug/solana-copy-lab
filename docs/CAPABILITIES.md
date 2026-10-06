@@ -32,6 +32,21 @@ See [fixture provenance](../test/fixtures/README.md).
 - No proven follower net expectancy, model ranking or profitable-wallet list.
 - No full support for every Jupiter instruction, Token-2022 extension or DEX.
 
+## Saved-evidence evaluation entry point
+
+In a Git checkout with a resolvable `HEAD`, `pnpm demo:workflow` generates
+`EVALUATION-REQUEST.json` for its closed synthetic snapshot.
+`pnpm evaluate:strategies <request.json>` binds the snapshot bytes,
+rejects nonempty WAL/journal sidecars, evaluates a temporary copy and summarizes
+every requested bucket. It reuses the existing read model, report workflow and
+fixed verdict policy. The request's evidence kind and source revision are
+declared metadata, not independent authenticity or runtime-closure proof.
+
+The existing paper policy's cycle requirement is not a generally validated
+alpha sample-size gate. `POSITIVE_CANDIDATE` still grants no funds or execution
+qualification, and `COST_COMPLETE` remains limited to its paper cost contract.
+See [the complete input/output contract](EVIDENCE-EVALUATION.md).
+
 ## Research value without a live quickstart
 
 The public snapshot deliberately supplies no qualified funded quickstart. It

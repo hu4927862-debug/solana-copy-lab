@@ -50,6 +50,9 @@ pnpm demo:review
 # Optional: write workflow artifacts to an explicitly NEW directory
 pnpm demo:workflow --output ./offline-example
 
+# Evaluate that closed snapshot through its generated request
+pnpm evaluate:strategies ./offline-example/EVALUATION-REQUEST.json
+
 # Type checking, source build, fixed tests and the supported examples
 pnpm check
 ```
@@ -107,15 +110,16 @@ runtime closure and funded operation remain excluded.
 
 ## Read the workflow output
 
-| Artifact                         | What to inspect                                                                                         |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `SUMMARY.json`                   | Case results, risk rejection reasons, quote-provider call count and paper position state.               |
-| `SYNTHETIC-INPUTS.json`          | Fixed synthetic input provenance; these are not new chain observations.                                 |
-| `SYNTHETIC-QUOTES.json`          | In-memory mock quote inputs and outputs, with exact decimal-string amounts. No provider request occurs. |
-| `paper.sqlite`                   | Disposable paper state created by this run using the existing migrations and Store.                     |
-| `report/evidence-report-v1.json` | Machine-readable evidence report and explicit insufficiency.                                            |
-| `report/evidence-report-v1.md`   | Human-readable report from the same read-only reporting owner.                                          |
-| `MANIFEST.json`                  | Artifact identity and file hashes for checking what was produced.                                       |
+| Artifact                         | What to inspect                                                                                                      |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `SUMMARY.json`                   | Case results, risk rejection reasons, quote-provider call count and paper position state.                            |
+| `SYNTHETIC-INPUTS.json`          | Fixed synthetic input provenance; these are not new chain observations.                                              |
+| `SYNTHETIC-QUOTES.json`          | In-memory mock quote inputs and outputs, with exact decimal-string amounts. No provider request occurs.              |
+| `paper.sqlite`                   | Disposable paper state created by this run using the existing migrations and Store.                                  |
+| `EVALUATION-REQUEST.json`        | When Git `HEAD` resolves: `OFFLINE_EVALUATION_REQUEST_V1`, closed snapshot SHA256, evidence kind and report context. |
+| `report/evidence-report-v1.json` | Machine-readable evidence report and explicit insufficiency.                                                         |
+| `report/evidence-report-v1.md`   | Human-readable report from the same read-only reporting owner.                                                       |
+| `MANIFEST.json`                  | Artifact identity and file hashes for checking what was produced.                                                    |
 
 The cases include a BUY, duplicate replay, excessive impact, missing impact,
 stale intent, ordinary transfer and FULL SELL. A paper position can close in the
@@ -127,6 +131,37 @@ for a particular capability.
 The demo uses the existing **paper** policy example. Its separately defined
 BUY/SELL caps are not the historical Money Lane authorization. This command
 does not change either policy or confer permission to trade.
+
+## Evaluate a saved snapshot
+
+`pnpm evaluate:strategies ./offline-example/EVALUATION-REQUEST.json` verifies
+the generated snapshot hash and evaluates its own temporary copy. Relative
+paths resolve from the request directory. The output location must be new;
+the default generated request uses `re-evaluated` within the example directory.
+Stdout lists the actual report paths and all requested evaluation buckets,
+including missing evidence and cost limitations.
+
+The new evaluation directory contains `evidence-report-v1.json`,
+`evidence-report-v1.md`, `SUMMARY.json` and `MANIFEST.json`. The summary includes
+request/snapshot/entry-point identities and unknown live costs. The manifest
+binds output files. A Git checkout with a resolvable `HEAD` generates the reusable
+request. Archives without a source revision still run the synthetic workflow,
+but report `SOURCE_REVISION_UNAVAILABLE` and do not supply a reusable request.
+
+For an existing dataset, start with
+[`config/strategy-evaluation.example.json`](../config/strategy-evaluation.example.json).
+Only a closed, complete independent snapshot is suitable; an active database
+with uncheckpointed WAL is not. The CLI rejects nonempty WAL/journal sidecars
+and mismatched snapshot bytes rather than changing the input. The evidence-kind
+and source-commit fields are declarations; a hash binds bytes but does not
+authenticate their capture history or prove a sealed runtime closure.
+
+Read [EVIDENCE-EVALUATION.md](EVIDENCE-EVALUATION.md) before interpreting a
+verdict. This entry point reviews fixed paper evidence and retains the existing
+policy. It does not fit a signal, test alpha or turn `POSITIVE_CANDIDATE` into
+execution qualification. Paper cost completeness does not establish real fill,
+network/tip or failed-execution costs. Keep operational databases and financial
+approvals private; a real dataset is not supplied with this example.
 
 ## Reuse classification in TypeScript
 
@@ -172,6 +207,7 @@ source-level examples, not a promised stable published npm API.
 | SQLite native source build fails                             | Save the first actual build error. If there is no usable prebuilt artifact for the environment, the native build needs Python, a C/C++ compiler and the platform build tools. On macOS this commonly means Command Line Tools; on Linux the corresponding toolchain. No global scanner or new runtime service is needed. |
 | Network or metadata error during installation                | This is dependency acquisition, not a failed offline demonstration. Keep the pinned versions and fix the package-manager/environment issue; do not disable integrity controls or introduce a substitute provider.                                                                                                        |
 | Workflow refuses an output path                              | Use a new directory or omit `--output`. It deliberately refuses reuse rather than changing an existing database.                                                                                                                                                                                                         |
+| Evaluator rejects a snapshot or request                      | Verify `OFFLINE_EVALUATION_REQUEST_V1`, the exact SHA256 and persisted context. Use a closed, checkpointed independent snapshot and a new output directory; do not delete live WAL or alter evidence to bypass the check.                                                                                                |
 | Experimental autonomous startup reports missing sealed files | Expected for a fresh public clone. See [public snapshot limits](OPEN_SOURCE.md); do not bypass hashes, substitute fixtures or invent authority.                                                                                                                                                                          |
 
 If reporting an issue, include OS/architecture, Node/pnpm versions, the exact

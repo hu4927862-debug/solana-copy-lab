@@ -6,7 +6,7 @@
 
 面向 Solana 钱包活动的离线研究工具：保守的 swap 分类、精确整数金额、Paper 记账、持久化风险门槛，以及可复现的证据报告。
 
-[English](README.md) · [快速开始](#快速开始) · [使用与安装排错](docs/USAGE.md) · [能力证据表](docs/CAPABILITIES.md) · [DEX 支持边界](docs/DEX-SUPPORT.md) · [参与贡献](#参与贡献)
+[English](README.md) · [快速开始](#快速开始) · [使用与安装排错](docs/USAGE.md) · [证据评估](docs/EVIDENCE-EVALUATION.md) · [能力证据表](docs/CAPABILITIES.md) · [DEX 支持边界](docs/DEX-SUPPORT.md) · [参与贡献](#参与贡献)
 
 ![Solana Copy Lab 架构：合成交易经过标准化、保守分类、Paper 风险、SQLite 记账和可检查的研究报告。](docs/assets/overview.svg)
 
@@ -41,18 +41,22 @@ mock provider，**对外 provider 请求为零**。
 
 它保留接受、重复、拒绝与缺失证据的结果，应用合成 BUY/FULL SELL，在新建
 临时目录生成摘要、精确输入/报价回执、`paper.sqlite`、JSON/Markdown 报告和
-hash manifest。报告仍为 `INSUFFICIENT_EVIDENCE`；Paper 仓位关闭不是真实
+hash manifest 和绑定快照身份的评估请求。报告仍为 `INSUFFICIENT_EVIDENCE`；Paper 仓位关闭不是真实
 finalized 成交，也不证明跟单有利润。
 
 ```sh
 # 可选输出目录必须尚不存在
 pnpm demo:workflow --output ./offline-example
 
+# 再次评估已关闭的快照；报告写入新的输出目录
+pnpm evaluate:strategies ./offline-example/EVALUATION-REQUEST.json
+
 # 最小可读的 TypeScript 分类调用
 pnpm example:classify
 ```
 
-产物说明与调用边界见 [USAGE.md](docs/USAGE.md)。不需要 API key、准备数据库
+产物说明与调用边界见 [USAGE.md](docs/USAGE.md) 和
+[证据评估契约](docs/EVIDENCE-EVALUATION.md)。不需要 API key、准备数据库
 或创建钱包。`pnpm start` 保留下面的快速分类演示。
 
 ### 演示会输出什么
@@ -142,7 +146,12 @@ pnpm exec vitest run test/integration/deterministic-evidence-report-workflow.tes
 
 Benchmark 测量本地解码与分类耗时，不是网络或交易执行延迟。报告测试检查输入数据库没有变化、重复输出字节一致，以及缺少证据时保留不足证据结论。
 
-对于你自己的不可变 Paper SQLite 快照，[`scripts/evaluate-strategies.ts`](scripts/evaluate-strategies.ts) 可以生成 JSON 与 Markdown 报告。[`config/strategy-evaluation.example.json`](config/strategy-evaluation.example.json) 是请求模板，使用前必须替换数据库、时间窗口、身份和策略绑定；仓库没有附带已填充的研究数据库。
+对于自己的已关闭 Paper SQLite 快照，`pnpm evaluate:strategies` 核验声明的
+文件 hash，在临时副本上评估，并报告全部请求 bucket。
+[请求模板](config/strategy-evaluation.example.json) 需要填入快照、证据类型、
+窗口、身份与策略绑定；[证据评估说明](docs/EVIDENCE-EVALUATION.md) 明确了
+快照和成本边界。Verdict 是固定 Paper 证据的审阅，不是 alpha 预测或交易批准。
+即使返回 `POSITIVE_CANDIDATE`，也不获得执行资格或资金权限。
 
 ## 代码导航
 

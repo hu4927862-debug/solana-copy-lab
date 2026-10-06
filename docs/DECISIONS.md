@@ -47,3 +47,19 @@ as direct DEX decoding or execution support.
 Keep all product source, original fixture JSON, dependencies, Money Lane rules
 and private operational history unchanged. This update does not reopen research
 collection, supply omitted private attestation assets or start any signer.
+
+## 2026-10-06 — Expose the existing evidence evaluator with explicit input identity
+
+Version 0.4.0 adds a closed-snapshot hash contract and fresh-output guard to the
+public evaluation script. Evaluate a private byte copy with the unchanged read
+model and report owners; never open an operational database for writing or
+checkpoint its sidecars. Retain all requested bucket results, failure counts,
+cost limitations and report hashes.
+
+Generate a runnable evaluation request from the synthetic paper workflow rather
+than requiring users to reconstruct the stored context by hand. A declared
+source revision, file hash or repeatable report is not proof of authentic chain
+capture, predictive alpha or real finalized net return. Unknown live costs and
+the need for a separately frozen signal/baseline remain explicit. This public
+tooling change does not reopen the closed private collection workstream or
+change strategy, risk, exit, execution scope or funds authority.

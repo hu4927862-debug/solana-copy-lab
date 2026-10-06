@@ -17,3 +17,8 @@ Read OPEN_SOURCE.md before interpreting any historical pins or comments as
 current operational evidence. A synthetic fixture is not a mainnet observation.
 Saved provider-neutral snapshots have explicit provenance limits; review guard
 checks that end at missing CPI evidence are not a complete transaction review.
+
+The public evaluation CLI accepts a hash-bound, closed Paper/Shadow-Paper
+snapshot and writes a fresh report directory. The synthetic workflow generates
+a runnable request when its source Git revision is available. This exposes the
+existing evaluator; it does not implement or validate a predictive signal.

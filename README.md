@@ -6,7 +6,7 @@
 
 An offline-first research toolkit for Solana wallet activity: conservative swap classification, exact integer amounts, paper accounting, durable risk gates, and reproducible evidence reports.
 
-[简体中文](README.zh-CN.md) · [Quick start](#quick-start) · [Usage & troubleshooting](docs/USAGE.md) · [Capability evidence](docs/CAPABILITIES.md) · [DEX boundaries](docs/DEX-SUPPORT.md) · [Contribute](#contributing)
+[简体中文](README.zh-CN.md) · [Quick start](#quick-start) · [Usage & troubleshooting](docs/USAGE.md) · [Evidence evaluation](docs/EVIDENCE-EVALUATION.md) · [Capability evidence](docs/CAPABILITIES.md) · [DEX boundaries](docs/DEX-SUPPORT.md) · [Contribute](#contributing)
 
 ![Solana Copy Lab architecture: synthetic transactions pass through normalization, conservative classification, paper risk, SQLite accounting and inspectable reports.](docs/assets/overview.svg)
 
@@ -42,18 +42,22 @@ transactions and an in-memory quote provider; **zero provider requests** occur.
 The workflow retains the results of accepted, duplicated, rejected and missing
 evidence cases, applies a synthetic BUY and FULL SELL, and writes a new temporary
 directory containing a summary, exact input/quote receipts, `paper.sqlite`, JSON
-and Markdown evidence reports, and a hash manifest. Its report remains
+and Markdown evidence reports, an identity-bound evaluation request, and a hash manifest. Its report remains
 `INSUFFICIENT_EVIDENCE`; a closed paper position is not a real finalized trade.
 
 ```sh
 # Optional output: this directory must not already exist
 pnpm demo:workflow --output ./offline-example
 
+# Re-evaluate the closed snapshot; reports go to a new output directory
+pnpm evaluate:strategies ./offline-example/EVALUATION-REQUEST.json
+
 # Minimal, readable TypeScript classification call
 pnpm example:classify
 ```
 
-Read [the artifacts and source-level API example](docs/USAGE.md). No API keys,
+Read [the artifacts and source-level API example](docs/USAGE.md) and
+[the evaluator contract](docs/EVIDENCE-EVALUATION.md). No API keys,
 database preparation or wallet setup are needed. `pnpm start` retains the small
 classification demo below.
 
@@ -152,7 +156,14 @@ pnpm exec vitest run test/integration/deterministic-evidence-report-workflow.tes
 
 The benchmark measures local decode/classification time; it is not network or trade execution latency. The reporting test checks that the input database remains unchanged, repeated outputs are byte-identical, and missing evidence yields an insufficient-evidence verdict.
 
-For your own immutable paper SQLite snapshot, [`scripts/evaluate-strategies.ts`](scripts/evaluate-strategies.ts) emits JSON and Markdown reports. [`config/strategy-evaluation.example.json`](config/strategy-evaluation.example.json) is a request template: replace its database, time window, identities and policy bindings before using it. A populated research database is not bundled.
+For your own closed paper SQLite snapshot, `pnpm evaluate:strategies` verifies
+the declared file hash, evaluates a temporary copy, and reports every requested
+bucket. [The request template](config/strategy-evaluation.example.json) requires
+your snapshot, evidence kind, window, identities and policy bindings. See
+[saved-evidence evaluation](docs/EVIDENCE-EVALUATION.md) for the snapshot and
+cost boundaries. A verdict reviews fixed paper evidence; it is not an alpha
+prediction or permission to trade. Even `POSITIVE_CANDIDATE` confers no execution
+qualification or funds authority.
 
 ## Code map
 
