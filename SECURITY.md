@@ -18,3 +18,19 @@ Public test success establishes only the tested offline behavior. It does not
 establish a current program attestation, executable route, live qualification,
 positive expectancy or funds authority. Network, signing, submission and
 recovery responsibilities must remain distinct from research classification.
+
+## Trust boundaries
+
+| Boundary | Supported offline behavior | Remaining limitation |
+| --- | --- | --- |
+| Transaction input | Exact amounts and supported swap evidence are inspected; ambiguous and unsupported cases can be rejected. | Classification is not universal asset-owner proof, token safety or permission to buy. |
+| Paper quote | A fixed fixture can exercise the existing amount, freshness, route and impact checks. | No live route, liquidity, landing, MEV protection or actual fill is verified. |
+| Paper ledger | The example uses a new synthetic SQLite database; duplicate application and paper position accounting are observable. | It is not a production Journal or real position/recovery truth. |
+| Evidence report | Missing labels and costs remain explicit; output cannot establish live expectancy. | Synthetic results do not validate a strategy or future execution. |
+| Experimental execution source | Original scope and authority guards remain in the source. | Private dependencies and attestation assets are absent; execution is not qualified by this release. |
+
+The examples need no provider URL, private key or funded wallet. Dependency
+installation still downloads software and may run explicitly allowed native
+build scripts. Review lockfile and build-permission changes separately from
+offline application behavior. Do not bypass missing private evidence or turn
+on a signer to reproduce an example.

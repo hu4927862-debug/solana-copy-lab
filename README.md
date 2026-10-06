@@ -6,9 +6,9 @@
 
 An offline-first research toolkit for Solana wallet activity: conservative swap classification, exact integer amounts, paper accounting, durable risk gates, and reproducible evidence reports.
 
-[简体中文](README.zh-CN.md) · [Quick start](#quick-start) · [Code map](#code-map) · [Contribute](#contributing)
+[简体中文](README.zh-CN.md) · [Quick start](#quick-start) · [Usage & troubleshooting](docs/USAGE.md) · [Capability evidence](docs/CAPABILITIES.md) · [Contribute](#contributing)
 
-![Solana Copy Lab architecture: transaction inputs pass through normalization and conservative classification, then into paper risk, accounting and evidence reports. The offline demo stops at classification.](docs/assets/overview.svg)
+![Solana Copy Lab architecture: synthetic transactions pass through normalization, conservative classification, paper risk, SQLite accounting and inspectable reports.](docs/assets/overview.svg)
 
 ## Why this exists
 
@@ -18,19 +18,44 @@ Solana Copy Lab makes those distinctions inspectable. It is useful for building 
 
 ## Quick start
 
-Use **Node.js 24 or newer** and **pnpm 11.22.0**, the version pinned in `package.json`. If your Node installation provides Corepack, `corepack pnpm` uses that pin; otherwise install the pinned pnpm version with your usual package manager.
+Use the tested **Node.js 24** and **pnpm 11.22.0** toolchain, pinned in `package.json`. Corepack is optional; if you use it, its pnpm command reads that pin. Otherwise select the pinned pnpm version with your usual package manager.
 
 ```sh
 git clone https://github.com/hu4927862-debug/solana-copy-lab.git
 cd solana-copy-lab
 pnpm install --frozen-lockfile
 pnpm demo
-pnpm test
-pnpm typecheck
-pnpm build
+pnpm demo:workflow
+pnpm check
 ```
 
 Installation downloads dependencies. The demo and default tests then run locally without RPC credentials or a wallet. Tests use fixed fixtures, temporary SQLite databases and, where needed, local mock servers. `better-sqlite3` is a native dependency; keep `pnpm-workspace.yaml`, which permits its build.
+
+If installation fails, start with [toolchain and native SQLite troubleshooting](docs/USAGE.md#troubleshooting). Do not disable all dependency build controls. Linux and macOS CI results are visible in the badge; Windows support is not claimed.
+
+### A complete paper workflow
+
+`pnpm demo:workflow` connects the existing classifier, copy engine, PRE/POST risk,
+SQLite Store, paper fill model and evidence reporter. It uses labeled synthetic
+transactions and an in-memory quote provider; **zero provider requests** occur.
+
+The workflow retains the results of accepted, duplicated, rejected and missing
+evidence cases, applies a synthetic BUY and FULL SELL, and writes a new temporary
+directory containing a summary, exact input/quote receipts, `paper.sqlite`, JSON
+and Markdown evidence reports, and a hash manifest. Its report remains
+`INSUFFICIENT_EVIDENCE`; a closed paper position is not a real finalized trade.
+
+```sh
+# Optional output: this directory must not already exist
+pnpm demo:workflow --output ./offline-example
+
+# Minimal, readable TypeScript classification call
+pnpm example:classify
+```
+
+Read [the artifacts and source-level API example](docs/USAGE.md). No API keys,
+database preparation or wallet setup are needed. `pnpm start` retains the small
+classification demo below.
 
 ### What the demo shows
 
@@ -57,6 +82,11 @@ Raw amounts stay `bigint` inside the decoder and become decimal strings in JSON.
 | Investigate provider behavior                       | [`src/network`](src/network), [`src/stream`](src/stream)             | Transport, pacing and stream recovery code; live use needs separate configuration.                |
 
 The fixed fixture collection includes both synthetic cases and minimized historical snapshots. See [fixture provenance](test/fixtures/README.md). The demo uses only the synthetic cases.
+
+The [capability evidence map](docs/CAPABILITIES.md) links actual input/output
+fields, owners, tests and limitations. RPC adapters, DEX recognition and failure
+handling exist in source; their offline coverage is distinct from live access,
+execution qualification and current program attestation.
 
 ## Evidence boundaries
 
@@ -103,6 +133,8 @@ src/strategy-evaluation/  evidence read models, metrics and reports
 src/live/ + autonomous/   experimental execution sources; see limits above
 test/                     offline unit, integration, recovery and fixtures
 scripts/demo-offline.ts   five synthetic cases; stdout only
+scripts/demo-paper-workflow.ts  connected synthetic paper workflow and report
+examples/                 small source-level TypeScript usage examples
 ```
 
 ## Contributing
@@ -115,6 +147,11 @@ Useful contributions make the existing toolkit easier to understand and reproduc
 - Improve portable installation, readable examples and CI reproducibility.
 
 Open an issue with the input shape, expected behavior, actual output, and Node/pnpm versions. Omit credentials, signer material and private operational records. Keep changes focused and run `pnpm test`, `pnpm typecheck` and `pnpm build`. Changes to algorithms, execution scope or funds permissions require a separate design discussion.
+
+Start with the complete demo from a fresh environment and report where its
+output is difficult to understand. Reproducible user feedback is more useful
+than claims of profitability or unsupported live operation. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the contribution boundary.
 
 ## License
 

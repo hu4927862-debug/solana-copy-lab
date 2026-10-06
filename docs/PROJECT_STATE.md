@@ -5,7 +5,8 @@ closed by the owner's decision. This repository publishes a reproducible
 research core and historical experimental source for study and contribution.
 It does not reopen collection or authorize trading.
 
-- Supported public path: offline demo, typed source build, fixed test suite.
+- Supported public path: offline classifier demo, synthetic paper workflow and
+  read-only evidence reports, typed source build, fixed test suite.
 - Historical execution source: present, with limitations in OPEN_SOURCE.md.
 - Deployment / execution qualification: not provided by this public snapshot.
 - Funds authorization: none. CI does not load production credentials.

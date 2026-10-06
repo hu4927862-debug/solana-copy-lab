@@ -1,6 +1,6 @@
 {
   "name": "solana-copy-lab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "Apache-2.0",
@@ -11,6 +11,8 @@
   "scripts": {
     "start": "pnpm demo",
     "demo": "node --import tsx scripts/demo-offline.ts",
+    "demo:workflow": "node --import tsx scripts/demo-paper-workflow.ts",
+    "example:classify": "node --import tsx examples/classify-transaction.ts",
     "test": "vitest run",
     "test:unit": "vitest run test/unit",
     "test:integration": "vitest run test/integration",
@@ -18,7 +20,7 @@
     "test:fixtures": "vitest run test/fixtures",
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
-    "check": "pnpm typecheck && pnpm build && pnpm test && pnpm demo",
+    "check": "pnpm typecheck && pnpm build && pnpm test && pnpm demo && pnpm demo:workflow && pnpm example:classify",
     "benchmark:latency": "node --import tsx scripts/benchmark-latency.ts",
     "evaluate:strategies": "node --import tsx scripts/evaluate-strategies.ts"
   },

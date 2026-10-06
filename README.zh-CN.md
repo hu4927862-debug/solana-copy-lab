@@ -6,9 +6,9 @@
 
 面向 Solana 钱包活动的离线研究工具：保守的 swap 分类、精确整数金额、Paper 记账、持久化风险门槛，以及可复现的证据报告。
 
-[English](README.md) · [快速开始](#快速开始) · [代码导航](#代码导航) · [参与贡献](#参与贡献)
+[English](README.md) · [快速开始](#快速开始) · [使用与安装排错](docs/USAGE.md) · [能力证据表](docs/CAPABILITIES.md) · [参与贡献](#参与贡献)
 
-![Solana Copy Lab 架构：交易输入经过标准化和保守分类，随后进入 Paper 风险、记账和证据报告。离线演示仅运行到分类。](docs/assets/overview.svg)
+![Solana Copy Lab 架构：合成交易经过标准化、保守分类、Paper 风险、SQLite 记账和可检查的研究报告。](docs/assets/overview.svg)
 
 ## 为什么做这个工具
 
@@ -18,19 +18,42 @@ Solana Copy Lab 把这些区别放到可检查的代码和证据中。你可以�
 
 ## 快速开始
 
-使用 **Node.js 24 或更新版本**，以及 `package.json` 固定的 **pnpm 11.22.0**。如果 Node 安装提供 Corepack，可使用 `corepack pnpm` 读取该版本；否则通过你常用的包管理方式安装指定 pnpm 版本。
+使用已验证的 **Node.js 24** 与 `package.json` 固定的 **pnpm 11.22.0**。Corepack 是可选工具；如果已使用它，其 pnpm 命令会读取该版本，否则通过常用包管理方式选择指定 pnpm 版本。
 
 ```sh
 git clone https://github.com/hu4927862-debug/solana-copy-lab.git
 cd solana-copy-lab
 pnpm install --frozen-lockfile
 pnpm demo
-pnpm test
-pnpm typecheck
-pnpm build
+pnpm demo:workflow
+pnpm check
 ```
 
 安装会下载依赖。之后演示和默认测试在本机运行，不需要 RPC 凭据或钱包。测试使用固定 fixtures、临时 SQLite 数据库，以及部分案例需要的本机模拟服务。`better-sqlite3` 是原生依赖；请保留允许其构建的 `pnpm-workspace.yaml`。
+
+安装失败时先看 [工具链与原生 SQLite 排错](docs/USAGE.md#troubleshooting)，不要放开全部依赖的构建权限。Linux/macOS 的具体 CI 结果可通过顶部徽章查看；目前不声称支持 Windows。
+
+### 完整 Paper 工作流
+
+`pnpm demo:workflow` 实际连接现有 classifier、copy engine、PRE/POST risk、
+SQLite Store、Paper fill 与证据报告。输入交易有合成来源声明，报价来自内存
+mock provider，**对外 provider 请求为零**。
+
+它保留接受、重复、拒绝与缺失证据的结果，应用合成 BUY/FULL SELL，在新建
+临时目录生成摘要、精确输入/报价回执、`paper.sqlite`、JSON/Markdown 报告和
+hash manifest。报告仍为 `INSUFFICIENT_EVIDENCE`；Paper 仓位关闭不是真实
+finalized 成交，也不证明跟单有利润。
+
+```sh
+# 可选输出目录必须尚不存在
+pnpm demo:workflow --output ./offline-example
+
+# 最小可读的 TypeScript 分类调用
+pnpm example:classify
+```
+
+产物说明与调用边界见 [USAGE.md](docs/USAGE.md)。不需要 API key、准备数据库
+或创建钱包。`pnpm start` 保留下面的快速分类演示。
 
 ### 演示会输出什么
 
@@ -57,6 +80,10 @@ pnpm build
 | 调查 provider 行为        | [`src/network`](src/network)、[`src/stream`](src/stream)             | 传输、请求节奏与流恢复代码；联网使用需要另行配置。                  |
 
 固定 fixture 集合同时包含合成案例与最小化的历史快照，来源说明见 [fixture provenance](test/fixtures/README.md)。演示只使用合成案例。
+
+[能力证据表](docs/CAPABILITIES.md) 将实际输入/输出字段、实现文件、对应测试
+与限制逐项关联。RPC adapter、DEX 识别、失败处理的源码存在，与离线测试通过、
+真实联网验证、当前程序证明及执行资格是不同层级。
 
 ## 证据边界
 
@@ -103,6 +130,8 @@ src/strategy-evaluation/  证据读模型、指标与报告
 src/live/ + autonomous/   实验性执行源码，限制见上文
 test/                     离线 unit、integration、recovery 与 fixtures
 scripts/demo-offline.ts   五个合成案例，仅输出 stdout
+scripts/demo-paper-workflow.ts  连接合成 Paper 工作流并生成报告
+examples/                 最小 source-level TypeScript 使用示例
 ```
 
 ## 参与贡献
@@ -115,6 +144,10 @@ scripts/demo-offline.ts   五个合成案例，仅输出 stdout
 - 改善跨平台安装、可读示例与 CI 可复现性。
 
 提交 issue 时附输入结构、预期行为、实际输出以及 Node/pnpm 版本，移除凭据、signer 材料和私有运行记录。保持修改范围清晰，运行 `pnpm test`、`pnpm typecheck` 和 `pnpm build`。算法、执行范围或资金权限的变更需要单独的设计讨论。
+
+优先在全新环境复现完整演示，指出输入或输出哪里难理解。真实、可复现的用户
+反馈，比未经验证的盈利或实盘宣称更有价值。贡献范围见
+[CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 许可证
 
