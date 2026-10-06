@@ -39,6 +39,11 @@ generates the reusable evaluation request. Archives lacking a source revision
 still run the synthetic workflow, but the reusable request is unavailable;
 `SOURCE_REVISION_UNAVAILABLE` is reported instead of an invented commit.
 
+Git must be available on `PATH` to resolve the source identity. Ordinary and
+packed references, detached checkouts and linked worktrees are supported. The
+workflow resolves its own checkout rather than using a parent repository or
+inherited `GIT_DIR`/`GIT_WORK_TREE` overrides.
+
 ## Bring an existing offline snapshot
 
 Use [the request template](../config/strategy-evaluation.example.json), replacing

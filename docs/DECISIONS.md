@@ -63,3 +63,16 @@ capture, predictive alpha or real finalized net return. Unknown live costs and
 the need for a separately frozen signal/baseline remain explicit. This public
 tooling change does not reopen the closed private collection workstream or
 change strategy, risk, exit, execution scope or funds authority.
+
+## 2026-10-06 — Resolve Git identity through Git for the offline workflow
+
+Version 0.4.1 fixes the workflow's incomplete loose-ref parser. Use local,
+read-only Git commands to resolve the source directory's HEAD across packed
+refs, detached checkouts and linked worktrees. Ignore inherited Git context
+overrides and require an actual local checkout with the matching root; source
+archives must not acquire an ancestor repository's version.
+
+Exercise real temporary Git layouts through the CLI and generated evaluation
+request. Missing Git or an unverifiable identity remains explicitly unavailable,
+not a fabricated release. Keep product source, dependency versions, original
+evidence and financial permissions unchanged.

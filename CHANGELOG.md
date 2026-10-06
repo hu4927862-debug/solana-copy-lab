@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.1
+
+- Fix source-revision discovery for packed Git refs and linked worktrees by
+  asking Git to resolve the local checkout's commit instead of reading loose
+  ref files. Ignore inherited Git context overrides and require the checkout
+  root to match the workflow source directory.
+- Add real temporary-Git CLI regressions that generate evaluation requests and
+  re-evaluate their snapshots. Keep archives without a local Git checkout in
+  `SOURCE_REVISION_UNAVAILABLE`; never borrow an ancestor repository's identity.
+- Preserve all product source, policies, original fixtures and dependencies.
+  This is an offline CLI compatibility fix, not a change in trading authority.
+
 ## 0.4.0
 
 - Make the existing offline evidence evaluator usable from a hash-bound request

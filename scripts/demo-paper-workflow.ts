@@ -1,9 +1,11 @@
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  realpathSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -91,14 +93,36 @@ class SyntheticQuotes implements JupiterOrderProvider {
 }
 
 function repositoryHead(): string {
+  const unavailable = "UNKNOWN_SOURCE_REVISION";
   try {
-    const head = readFileSync(resolve(root, ".git/HEAD"), "utf8").trim();
-    const value = head.startsWith("ref: ")
-      ? readFileSync(resolve(root, ".git", head.slice(5)), "utf8").trim()
-      : head;
-    return /^[0-9a-f]{40}$/.test(value) ? value : "UNKNOWN_SOURCE_REVISION";
+    // An archive nested in another repository must not borrow its parent's HEAD.
+    if (!existsSync(resolve(root, ".git"))) return unavailable;
+    // Git resolves packed refs and linked worktree pointers. Inherited overrides
+    // could select another repository, so none are allowed for this local read.
+    const env = {
+      ...Object.fromEntries(
+        Object.entries(process.env).filter(
+          ([name]) => !name.startsWith("GIT_"),
+        ),
+      ),
+      GIT_NO_LAZY_FETCH: "1",
+      GIT_TERMINAL_PROMPT: "0",
+      GIT_OPTIONAL_LOCKS: "0",
+    };
+    const git = (...args: string[]) =>
+      execFileSync("git", ["-C", root, "rev-parse", ...args], {
+        env,
+        encoding: "utf8",
+        timeout: 2_000,
+        stdio: ["ignore", "pipe", "ignore"],
+        maxBuffer: 4_096,
+      }).trim();
+    if (realpathSync(git("--show-toplevel")) !== realpathSync(root))
+      return unavailable;
+    const value = git("--verify", "HEAD^{commit}");
+    return /^[0-9a-f]{40}$/.test(value) ? value : unavailable;
   } catch {
-    return "UNKNOWN_SOURCE_REVISION";
+    return unavailable;
   }
 }
 
