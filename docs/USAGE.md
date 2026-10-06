@@ -2,7 +2,7 @@
 
 The supported public workflow uses synthetic inputs, local computation and a
 new disposable SQLite database. It does not read provider keys, connect to RPC,
-build a Solana transaction, simulate on chain, sign or send. Installation still
+build a live transaction, simulate on chain, sign or send. Installation still
 downloads npm dependencies; offline execution begins after installation.
 
 ## Install the pinned toolchain
@@ -41,6 +41,12 @@ pnpm example:classify
 # Classification → paper risk → persisted fills → evidence report
 pnpm demo:workflow
 
+# Four saved provider-neutral JSON inputs; separate chain and replay clocks
+pnpm demo:replay
+
+# Synthetic bytes through the actual reviewer; missing CPI evidence must block
+pnpm demo:review
+
 # Optional: write workflow artifacts to an explicitly NEW directory
 pnpm demo:workflow --output ./offline-example
 
@@ -52,6 +58,52 @@ The workflow prints its actual output location. The default is a fresh temporary
 directory; an explicit output directory must not already exist. This prevents a
 demo from overwriting previous results or using a supplied operational database.
 `pnpm start` remains the five-case classification demo.
+
+## Saved-input replay and byte-review demonstration
+
+`pnpm demo:replay` reads the four `v5-*.json` files listed in
+[fixture provenance](../test/fixtures/README.md). It prints source-file identity,
+chain time, a distinct local replay clock, exact amounts and principal evidence.
+It neither fetches a transaction nor writes an observation into an operational
+Store. The replay clock is not the time the historical follower first knew the
+transaction. File hashes bind this replay input, not an omitted original RPC
+capture or an independently complete ownership audit.
+
+The stdout contract is `OFFLINE_SNAPSHOT_REPLAY_V1`. For each snapshot inspect
+`sourceSha256`, `signature`/`slot`, `chainTimeMs`, `replayedAtMs`,
+`replayReceiptKind`, `fixtureOwner`/`ownerBasis`, payer/signers and
+`walletNativeDeltaRaw`. Accepted rows additionally contain `tokenRaw`, `quoteRaw`
+and principal `evidence`; native wallet delta is not automatically swap principal.
+`originalRpcReceipt` and `historicalFirstObservedAt` remain `UNKNOWN`. Negative
+controls mutate proof/caller inputs and remain labeled synthetic controls.
+
+The checked-in inputs currently yield these exact classifier amounts; this is
+replay of the published representation, not fresh independent chain verification:
+
+| Snapshot                               | Side | Token raw        | Quote input / proceeds raw (lamports) |
+| -------------------------------------- | ---- | ---------------- | ------------------------------------- |
+| `v5-native-sol-with-rent`              | BUY  | `418484406419`   | `5000000`                             |
+| `v5-jupiter-buy-with-refund`           | BUY  | `52614039669334` | `997037`                              |
+| `v5-jupiter-sell-with-output-fee`      | SELL | `21178399997852` | `7816843`                             |
+| `v5-jupiter-full-sell-with-output-fee` | SELL | `944791432947`   | `1230294`                             |
+
+`pnpm demo:review` passes **synthetic unsigned bytes** to the existing
+`reviewTransaction` / `decodeWire` checks and exercises signature-message
+rejection boundaries. The reference shape reaches `CPI_EVIDENCE_REQUIRED`:
+this is an `EXPECTED_BLOCK`, not a successful transaction review. It does not
+download attestation binaries, create independent CPI evidence, perform chain
+simulation or invoke a signer. Expiry, Journal responsibility, real authorization
+and live signer/POST qualification are not established by this demo.
+
+Its stdout schema is `PUBLIC_OFFLINE_REVIEW_GUARDS_V1`; all nine cases report
+`EXPECTED_BLOCK`, and `completeTransactionReview` remains
+`NOT_PASSED_MISSING_CPI_EVIDENCE`. Expected errors include missing CPI evidence,
+wrong wallet/program/account/amount/slippage, exceeded network-fee budget, changed message at signature intake
+and absent signature. No real signature is generated or accepted.
+
+These two stdout examples complement the paper workflow. They do not make all
+protocols supported; see [DEX boundaries](DEX-SUPPORT.md). Complete historical
+runtime closure and funded operation remain excluded.
 
 ## Read the workflow output
 

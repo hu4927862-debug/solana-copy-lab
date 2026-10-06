@@ -6,7 +6,7 @@
 
 面向 Solana 钱包活动的离线研究工具：保守的 swap 分类、精确整数金额、Paper 记账、持久化风险门槛，以及可复现的证据报告。
 
-[English](README.md) · [快速开始](#快速开始) · [使用与安装排错](docs/USAGE.md) · [能力证据表](docs/CAPABILITIES.md) · [参与贡献](#参与贡献)
+[English](README.md) · [快速开始](#快速开始) · [使用与安装排错](docs/USAGE.md) · [能力证据表](docs/CAPABILITIES.md) · [DEX 支持边界](docs/DEX-SUPPORT.md) · [参与贡献](#参与贡献)
 
 ![Solana Copy Lab 架构：合成交易经过标准化、保守分类、Paper 风险、SQLite 记账和可检查的研究报告。](docs/assets/overview.svg)
 
@@ -79,11 +79,34 @@ pnpm example:classify
 | 审阅研究证据              | [`src/strategy-evaluation`](src/strategy-evaluation)                 | 成本完整性、round trip、可比性、缺失证据与确定性报告。              |
 | 调查 provider 行为        | [`src/network`](src/network)、[`src/stream`](src/stream)             | 传输、请求节奏与流恢复代码；联网使用需要另行配置。                  |
 
-固定 fixture 集合同时包含合成案例与最小化的历史快照，来源说明见 [fixture provenance](test/fixtures/README.md)。演示只使用合成案例。
+固定 fixture 集合包含合成案例、8份重组的最小化历史观测，以及4份较完整的
+provider-neutral JSON 输入；原始完整 RPC capture 来源链未公开。见
+[fixture 来源说明](test/fixtures/README.md)。五案例演示只使用合成输入。
+
+### 回放已保存输入，检查独立审查边界
+
+```sh
+# 读取4份已提交快照，不发 RPC，也不制造新观测
+pnpm demo:replay
+
+# 用合成 unsigned bytes 调用现有独立 reviewer
+pnpm demo:review
+```
+
+回放输出精确整数、输入文件 hash、链上时间、单独标注的本地 replay 时钟，
+以及候选 wallet 的证据边界。它不补全原始 capture 来源链，不证明历史全量覆盖。
+
+字节审查示例调用真实 reviewer；基准案例**预期阻断**于
+`CPI_EVIDENCE_REQUIRED`，反例检查 wallet、program、account、amount 与消息边界。
+预期阻断不等于交易 review 通过或 BUY/SELL 资格完成。不 build 真实交易，
+不链上 simulate，不调用真实 signer，不发送。
 
 [能力证据表](docs/CAPABILITIES.md) 将实际输入/输出字段、实现文件、对应测试
 与限制逐项关联。RPC adapter、DEX 识别、失败处理的源码存在，与离线测试通过、
 真实联网验证、当前程序证明及执行资格是不同层级。
+
+[DEX 支持边界](docs/DEX-SUPPORT.md) 将源指令识别、provider route label、历史
+execution 检查分开。Jupiter label 或 Raydium AMM 分类，不等于 CLMM 执行资格。
 
 ## 证据边界
 
@@ -94,7 +117,10 @@ pnpm example:classify
 
 ### 实验性执行源码
 
-`src/live` 与 `src/autonomous` 保留实验性的交易审查、执行、签名策略和责任处理源码，供阅读检查。它们不在默认公开测试范围内。**不附带**私有运行证据、固定的封存 Research 依赖闭包、signer 凭据或程序证明二进制文件。
+`src/live` 与 `src/autonomous` 保留实验性的交易审查、执行、签名策略和责任处理
+源码，供阅读检查。部分纯字节审查边界有公开的合成测试；完整历史 execution/
+qualification suite 仍未公开。**不附带**私有运行证据、固定封存 Research 依赖
+闭包、signer 凭据或程序证明二进制文件。
 
 Fresh clone 无法完成历史自主 runtime 检查或执行该部署。TypeScript build 成功只说明源码编译通过；它不会补齐封存闭包、复制全部运行资产、证明执行资格或授予资金权限。请将这些模块视为实验性源码，不是可直接启动的交易机器人。
 
@@ -131,6 +157,8 @@ src/live/ + autonomous/   实验性执行源码，限制见上文
 test/                     离线 unit、integration、recovery 与 fixtures
 scripts/demo-offline.ts   五个合成案例，仅输出 stdout
 scripts/demo-paper-workflow.ts  连接合成 Paper 工作流并生成报告
+scripts/demo-snapshot-replay.ts  已保存输入回放，明确来源限制
+scripts/demo-review-offline.ts  合成独立审查拒绝边界
 examples/                 最小 source-level TypeScript 使用示例
 ```
 

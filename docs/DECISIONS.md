@@ -29,3 +29,21 @@ matrix and installation guidance. CI runs the public checks on Linux and
 macOS with Node 24. Product source, dependencies, original risk policies and
 private historical state remain unchanged. No collection or funds authority
 is introduced by version 0.2.0.
+
+## 2026-10-06 — Expose saved evidence and review limits without live integration
+
+Version 0.3.0 reuses four already published provider-neutral JSON snapshots and
+the original reader, normalizer and classifier in an offline replay command.
+Publish exact local file hashes, supported amount semantics and separate
+chain/replay times; keep unknown original capture provenance explicit. Strengthen
+the existing minimized snapshot assertions without rewriting their input bytes.
+
+Use only synthetic unsigned message fixtures to exercise the original pure
+transaction-review guards. A control that stops on missing CPI evidence remains
+blocked and does not acquire authority or qualification. Publish the concrete
+DEX and instruction support boundary rather than treating an aggregator label
+as direct DEX decoding or execution support.
+
+Keep all product source, original fixture JSON, dependencies, Money Lane rules
+and private operational history unchanged. This update does not reopen research
+collection, supply omitted private attestation assets or start any signer.

@@ -6,7 +6,7 @@
 
 An offline-first research toolkit for Solana wallet activity: conservative swap classification, exact integer amounts, paper accounting, durable risk gates, and reproducible evidence reports.
 
-[简体中文](README.zh-CN.md) · [Quick start](#quick-start) · [Usage & troubleshooting](docs/USAGE.md) · [Capability evidence](docs/CAPABILITIES.md) · [Contribute](#contributing)
+[简体中文](README.zh-CN.md) · [Quick start](#quick-start) · [Usage & troubleshooting](docs/USAGE.md) · [Capability evidence](docs/CAPABILITIES.md) · [DEX boundaries](docs/DEX-SUPPORT.md) · [Contribute](#contributing)
 
 ![Solana Copy Lab architecture: synthetic transactions pass through normalization, conservative classification, paper risk, SQLite accounting and inspectable reports.](docs/assets/overview.svg)
 
@@ -81,12 +81,40 @@ Raw amounts stay `bigint` inside the decoder and become decimal strings in JSON.
 | Review research evidence                            | [`src/strategy-evaluation`](src/strategy-evaluation)                 | Cost completeness, round trips, comparability, missing evidence and deterministic reports.        |
 | Investigate provider behavior                       | [`src/network`](src/network), [`src/stream`](src/stream)             | Transport, pacing and stream recovery code; live use needs separate configuration.                |
 
-The fixed fixture collection includes both synthetic cases and minimized historical snapshots. See [fixture provenance](test/fixtures/README.md). The demo uses only the synthetic cases.
+The fixed fixture collection includes synthetic cases, eight reconstructed
+minimized historical observations and four larger provider-neutral JSON inputs.
+The original full RPC capture chain is not published. See
+[fixture provenance](test/fixtures/README.md); the five-case demo uses only
+synthetic cases.
+
+### Replay saved inputs and inspect review boundaries
+
+```sh
+# Read four checked-in provider-neutral snapshots; no RPC or fresh observation
+pnpm demo:replay
+
+# Exercise real byte-review checks with synthetic unsigned input
+pnpm demo:review
+```
+
+Replay reports exact amounts, input-file hashes, chain timestamps, a separately
+labeled local replay clock and the candidate-wallet evidence boundary. It does
+not establish full capture provenance or historical market coverage.
+
+The byte-review example calls the existing independent reviewer with synthetic
+messages. Its baseline is **expected to block** at `CPI_EVIDENCE_REQUIRED`, and
+negative cases exercise selected wallet, program, account, amount and message
+boundaries. An expected block is not a successful transaction review or a
+qualified BUY/SELL. It performs no live build, chain simulation, signing or send.
 
 The [capability evidence map](docs/CAPABILITIES.md) links actual input/output
 fields, owners, tests and limitations. RPC adapters, DEX recognition and failure
 handling exist in source; their offline coverage is distinct from live access,
 execution qualification and current program attestation.
+
+[DEX support boundaries](docs/DEX-SUPPORT.md) separates source instruction
+recognition, provider quote labels and historical execution checks. A Jupiter
+label or Raydium AMM classification must not be read as qualified CLMM execution.
 
 ## Evidence boundaries
 
@@ -97,7 +125,12 @@ execution qualification and current program attestation.
 
 ### Experimental execution sources
 
-`src/live` and `src/autonomous` preserve experimental transaction review, execution, signing-policy and responsibility code for inspection. They are outside the default public test suite. Private operational evidence, the pinned sealed Research dependency closure, signer credentials and program-attestation binary artifacts are **not included**.
+`src/live` and `src/autonomous` preserve experimental transaction review,
+execution, signing-policy and responsibility code for inspection. Selected pure
+byte-review boundaries have public synthetic tests; complete historical
+execution/qualification suites remain outside the public distribution. Private
+operational evidence, the pinned sealed Research dependency closure, signer
+credentials and program-attestation binary artifacts are **not included**.
 
 A fresh clone cannot complete the autonomous runtime checks or execute that historical deployment. A successful TypeScript build checks source compilation; it does not supply the missing closure, copy all runtime assets, qualify execution, or confer funds authority. Review these modules as experimental source, not a ready-to-launch bot.
 
@@ -134,6 +167,8 @@ src/live/ + autonomous/   experimental execution sources; see limits above
 test/                     offline unit, integration, recovery and fixtures
 scripts/demo-offline.ts   five synthetic cases; stdout only
 scripts/demo-paper-workflow.ts  connected synthetic paper workflow and report
+scripts/demo-snapshot-replay.ts  saved-input replay with provenance limits
+scripts/demo-review-offline.ts  synthetic independent-review rejection checks
 examples/                 small source-level TypeScript usage examples
 ```
 

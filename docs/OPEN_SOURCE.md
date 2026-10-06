@@ -11,6 +11,8 @@ public by deleting files in a later commit.
 - Historical `src/live` and `src/autonomous` source, for inspection.
 - Offline unit, integration, recovery and decoder fixtures; SQL migrations.
 - Examples, pinned package lockfile, local demo and build/test configuration.
+- Replay of four saved provider-neutral inputs and selected synthetic negative
+  byte-review cases through the original independent reviewer.
 
 ## Excluded
 
@@ -27,6 +29,12 @@ public by deleting files in a later commit.
 historical private test. Classification support is not execution support, and
 its evidence model is not a universal transaction/ownership decoder.
 
+The eight historical entries assembled by `capturedSwap` are minimized,
+reconstructed regression representations; the four standalone v5 JSON files
+are provider-neutral inputs. Neither collection publishes its complete original
+RPC capture chain. A checked-in file hash binds the replay input but cannot
+replace that provenance. See [fixture disclosure](../test/fixtures/README.md).
+
 `pnpm build` compiles TypeScript. It does not package native `.mjs` files or
 supply omitted attestation data. In particular, `research-owner.mjs` still
 requires its original hash-pinned closure: absence fails closed. The public
@@ -34,9 +42,18 @@ copy never substitutes a fixture, removes a guard or invents authority there.
 
 `src/live` and `src/autonomous` are experimental source, not a working funded
 quickstart. Their pinned observations are historical, not a current program
-verification. Public CI does not qualify those paths or validate profitability.
+verification. Selected pure reviewer rejection checks now use public synthetic
+bytes; the baseline correctly blocks on missing independent CPI evidence.
+This does not replace the omitted complete qualification suites, current program
+attestation, chain simulation, expiry/authorization checks, Journal liability or
+signer/POST qualification. Public CI does not qualify those paths or validate
+profitability.
 
 The public test adaptation replaces a historical canary's wallet/config input
 with a temporary synthetic input and makes one timeout test use a controlled
 clock. Product source remains unchanged. Changes to package scripts and docs
 apply only to this independent public distribution.
+
+[DEX boundaries](DEX-SUPPORT.md) distinguish basic instruction recognition,
+opaque provider route labels and historical narrow execution source. Publication
+does not add a decoder format, widen a program allowlist or permit a new route.
