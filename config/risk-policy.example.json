@@ -1,0 +1,16 @@
+{
+  "policyVersion": "PAPER_RISK_V1",
+  "maxSingleTradeRawByQuoteMint": { "SOL_NATIVE": "100000000" },
+  "maxTokenExposureRawByQuoteMint": { "SOL_NATIVE": "1000000000" },
+  "maxPortfolioExposureRawByQuoteMint": { "SOL_NATIVE": "5000000000" },
+  "dailyRealizedLossLimitRawByQuoteMint": { "SOL_NATIVE": "500000000" },
+  "maxIntentAgeMs": 60000,
+  "maxQuoteAgeMs": 5000,
+  "maxBuyPriceImpactPctByQuoteMint": { "SOL_NATIVE": "1.25" },
+  "maxSellPriceImpactPctByQuoteMint": { "SOL_NATIVE": "2.50" },
+  "requireRouteEvidence": true,
+  "provider429BurstThreshold": 3,
+  "providerBurstWindowMs": 60000,
+  "providerCooldownMs": 30000,
+  "halfOpenProbe": 1
+}

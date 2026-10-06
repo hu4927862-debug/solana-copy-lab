@@ -1,0 +1,17 @@
+Solana Copy Lab
+Copyright 2026 Autonomous Solana Copy Trading MVP contributors
+
+This public source snapshot is distributed under the Apache License, Version 2.0.
+
+Raydium CLMM reference implementation
+- Upstream: https://github.com/raydium-io/raydium-clmm
+- Pinned commit: ed1eb41519d5355755f7df52b43fa9610938b60b
+- Source: programs/amm/src/libraries/tick_math.rs
+- Source SHA256: 78ef34cd512c3a6395c69042168154d4acd559f49653f490df274da5044b31a7
+- Local adaptation: src/live/cpi-semantic-evidence.ts (Q64 factors and integer rounding)
+- License: Apache-2.0, verified from LICENSE at the pinned commit.
+- Local form is a TypeScript adaptation for a narrow independent state proof;
+  it does not include the Rust program, SDK or deployed program binary.
+
+Package dependencies are not vendored. Their own licenses continue to apply.
+Full private evidence and captured third-party deployment binaries are excluded.

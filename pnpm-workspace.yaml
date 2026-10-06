@@ -1,0 +1,11 @@
+packages:
+  - .
+
+# Build only the required SQLite/TypeScript tooling dependencies. Optional
+# WebSocket/bigint native accelerators use their upstream JavaScript fallbacks.
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  bigint-buffer: false
+  bufferutil: false
+  utf-8-validate: false

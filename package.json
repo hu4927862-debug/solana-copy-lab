@@ -1,0 +1,67 @@
+{
+  "name": "solana-copy-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "scripts": {
+    "start": "pnpm demo",
+    "demo": "node --import tsx scripts/demo-offline.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:integration": "vitest run test/integration",
+    "test:recovery": "vitest run test/recovery",
+    "test:fixtures": "vitest run test/fixtures",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "check": "pnpm typecheck && pnpm build && pnpm test && pnpm demo",
+    "benchmark:latency": "node --import tsx scripts/benchmark-latency.ts",
+    "evaluate:strategies": "node --import tsx scripts/evaluate-strategies.ts"
+  },
+  "dependencies": {
+    "@meteora-ag/cp-amm-sdk": "1.4.10",
+    "@solana/kit": "7.1.1",
+    "@solana/web3.js": "1.99.0",
+    "@triton-one/yellowstone-grpc": "6.0.0",
+    "better-sqlite3": "13.0.3",
+    "bn.js": "5.2.5",
+    "bs58": "6.0.0",
+    "decimal.js": "10.6.0",
+    "drizzle-orm": "0.45.2",
+    "p-queue": "9.3.3",
+    "pino": "10.3.1",
+    "undici": "7.29.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "9.6.0",
+    "@types/bn.js": "5.2.0",
+    "@types/node": "24.10.1",
+    "drizzle-kit": "0.31.10",
+    "prettier": "3.9.6",
+    "tsx": "4.23.12",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  },
+  "description": "Evidence-first Solana copy-trading research with exact raw amounts, offline fixtures, risk gates and durable accounting.",
+  "homepage": "https://github.com/hu4927862-debug/solana-copy-lab",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hu4927862-debug/solana-copy-lab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hu4927862-debug/solana-copy-lab/issues"
+  },
+  "keywords": [
+    "solana",
+    "copy-trading",
+    "research",
+    "typescript",
+    "risk-management",
+    "transaction-decoding"
+  ]
+}

@@ -1,0 +1,17 @@
+name: Focused improvement
+description: Propose a small, evidence-backed improvement
+title: "[proposal] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Concrete problem and evidence
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Smallest change, validation and maintenance cost
+      description: Identify what can be reused or removed. Do not assume live or financial authority.
+    validations:
+      required: true

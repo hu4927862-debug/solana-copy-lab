@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title description">
+  <title id="title">Solana Copy Lab: from wallet transaction to inspectable evidence</title>
+  <desc id="description">The offline demo passes synthetic transaction fixtures through the normalizer and conservative classifier. Accepted observations can feed paper decisions, risk gates, SQLite accounting and evidence reports. Rejected observations retain reasons. Experimental live and autonomous sources are outside the runnable demo and require missing private sealed dependencies and execution qualification.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f8f7"/>
+      <stop offset="1" stop-color="#eef1fa"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10Z" fill="#486375"/>
+    </marker>
+    <style>
+      text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .title{font-size:36px;font-weight:750;fill:#153b39;letter-spacing:-1px}
+      .subtitle{font-size:18px;fill:#486375}
+      .section{font-size:13px;font-weight:700;letter-spacing:2px;fill:#477669}
+      .label{font-size:20px;font-weight:700;fill:#153b39}
+      .detail{font-size:15px;fill:#4b626b}
+      .tag{font-size:12px;font-weight:700;letter-spacing:1px;fill:#326b55}
+      .arrow{fill:none;stroke:#486375;stroke-width:2;marker-end:url(#arrow)}
+      .box{fill:#fff;stroke:#c4d8d2;stroke-width:1.5}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1200" height="640" rx="24" fill="url(#background)"/>
+  <rect x="44" y="43" width="9" height="45" rx="4.5" fill="#279977"/>
+  <text x="70" y="72" class="title">Solana Copy Lab</text>
+  <text x="70" y="105" class="subtitle">Understand the transaction. Preserve the evidence.</text>
+  <rect x="941" y="47" width="211" height="34" rx="17" fill="#dceee5"/>
+  <text x="1046" y="69" text-anchor="middle" class="tag">OFFLINE FIRST</text>
+
+  <rect x="44" y="140" width="1112" height="195" rx="18" fill="#e5f2eb" stroke="#c4dfd1"/>
+  <text x="67" y="171" class="section">01 / RUN THE SYNTHETIC DEMO</text>
+  <rect x="66" y="192" width="258" height="113" rx="13" class="box"/>
+  <text x="87" y="227" class="label">Transaction fixtures</text>
+  <text x="87" y="254" class="detail">BUY, SELL, transfer, failure</text>
+  <text x="87" y="278" class="detail">Explicit synthetic provenance</text>
+  <path d="M330 248H365" class="arrow"/>
+  <rect x="377" y="192" width="258" height="113" rx="13" class="box"/>
+  <text x="398" y="227" class="label">Normalize</text>
+  <text x="398" y="254" class="detail">Exact raw amounts with bigint</text>
+  <text x="398" y="278" class="detail">Accounts, deltas, instructions</text>
+  <path d="M641 248H676" class="arrow"/>
+  <rect x="688" y="192" width="280" height="113" rx="13" class="box"/>
+  <text x="709" y="227" class="label">Classify conservatively</text>
+  <text x="709" y="254" class="detail">Signer + delta + swap evidence</text>
+  <text x="709" y="278" class="detail">ACCEPT / REJECT with reasons</text>
+  <text x="989" y="242" class="tag">JSON</text>
+  <text x="989" y="266" class="detail">stdout</text>
+  <path d="M974 248H982" class="arrow"/>
+
+  <text x="67" y="377" class="section">02 / EXPLORE THE PAPER RESEARCH TOOLKIT</text>
+  <rect x="66" y="395" width="310" height="105" rx="13" class="box"/>
+  <text x="87" y="431" class="label">Paper decision + risk</text>
+  <text x="87" y="457" class="detail">Sizing, exposure, freshness</text>
+  <text x="87" y="481" class="detail">Declared fill model and limits</text>
+  <path d="M382 448H415" class="arrow"/>
+  <rect x="427" y="395" width="310" height="105" rx="13" class="box"/>
+  <text x="448" y="431" class="label">SQLite accounting</text>
+  <text x="448" y="457" class="detail">Positions, reservations, fills</text>
+  <text x="448" y="481" class="detail">Replay and interruption recovery</text>
+  <path d="M743 448H776" class="arrow"/>
+  <rect x="788" y="395" width="346" height="105" rx="13" class="box"/>
+  <text x="809" y="431" class="label">Inspect evidence</text>
+  <text x="809" y="457" class="detail">Deterministic reports + provenance</text>
+  <text x="809" y="481" class="detail">Missing costs and outcomes stay explicit</text>
+
+  <rect x="44" y="529" width="1112" height="76" rx="14" fill="#153b39"/>
+  <text x="67" y="557" font-size="15" font-weight="700" fill="#e3f3e9">Classification → paper model → research evidence</text>
+  <text x="67" y="582" font-size="14" fill="#b9d4cc">None of these alone proves execution qualification, funds authority or profitability.</text>
+  <text x="956" y="557" font-size="12" font-weight="700" letter-spacing="1" fill="#aad9c4">EXPERIMENTAL</text>
+  <text x="956" y="581" font-size="14" fill="#b9d4cc">live / autonomous</text>
+</svg>

@@ -1,0 +1,175 @@
+{
+  "availabilityPolicy": {
+    "blockingOpportunityCoverageCountsMustEqualZero": [
+      "FAILURE_DATA_LIMITATION_COUNT",
+      "FAILURE_UNAVAILABLE_COUNT",
+      "END_TO_END_APPLICATION_DATA_LIMITATION_COUNT",
+      "END_TO_END_APPLICATION_UNAVAILABLE_COUNT"
+    ],
+    "censoringCountsMustEqualZero": [
+      "leftCensoredCount",
+      "rightCensoredCount",
+      "preWindowOpenCount",
+      "sourceUnavailableCount"
+    ],
+    "hardBlockingEvidenceIds": [
+      "ARTIFACT_INTEGRITY",
+      "EXACT_REQUIRED_DEFINITIONS",
+      "FOLLOWER_PAPER_SCOPE_AND_PROVENANCE",
+      "HISTORICAL_CORE",
+      "VERDICT_SAMPLE",
+      "CENSORING",
+      "COHORT_IDENTITY_AND_COMPATIBILITY",
+      "FOLLOWER_COST_DIRECTION",
+      "REQUIRED_EXECUTION_DENOMINATORS",
+      "REQUIRED_FAILURE_TAXONOMY",
+      "REQUIRED_RELIABILITY_BINDINGS",
+      "FOLLOWER_EXPECTANCY",
+      "ECONOMIC_METRIC_CONSISTENCY"
+    ],
+    "requiredBlockingUnavailableCountMustEqual": 0,
+    "requiredExecutionDenominators": [
+      "JUPITER_ATTEMPT_OUTCOME",
+      "POST_RISK_AND_PRICE_IMPACT",
+      "PAPER_FILL_AND_APPLICATION",
+      "END_TO_END_APPLICATION",
+      "CANONICAL_OPPORTUNITY_FAILURE_TAXONOMY"
+    ]
+  },
+  "claimExclusions": [
+    "PROFITABLE",
+    "STATISTICALLY_PROVEN",
+    "ROBUST",
+    "SAFE",
+    "LIVE_READY",
+    "REAL_FUNDS_RECOMMENDED",
+    "LEADER_PROFITABLE",
+    "LEADER_COPYABLE"
+  ],
+  "costPolicy": {
+    "negativeAllowedStates": [
+      "COMPLETE",
+      "NEGATIVE_MONOTONE_INCOMPLETE"
+    ],
+    "negativeMonotonicException": {
+      "allowed": true,
+      "limitationCode": "NEGATIVE_EXPECTANCY_MONOTONIC_MISSING_COSTS",
+      "proofQuantifier": "EVERY_MISSING_ITEM",
+      "proofRequirements": [
+        "NON_NEGATIVE_COST",
+        "CANNOT_INCREASE_RETURN",
+        "CANNOT_ALTER_QUANTITY",
+        "CANNOT_ALTER_LIFECYCLE_IDENTITY",
+        "CANNOT_ALTER_DENOMINATOR",
+        "CANNOT_ALTER_FILL_PRICE_OR_DIRECTION",
+        "NO_POSSIBLE_MISSING_REVENUE_OR_REBATE"
+      ]
+    },
+    "positiveRequirement": "COMPLETE_REQUIRED_FOLLOWER_COST_EVIDENCE"
+  },
+  "definitionCompatibility": {
+    "mode": "EXACT_CURRENT_ONLY",
+    "requiredVersions": {
+      "accountingPolicy": "WEIGHTED_AVERAGE_V1",
+      "cohortCompatibility": "LEADER_COHORT_COMPATIBILITY_V1",
+      "costCompleteness": "COST_COMPLETENESS_V1",
+      "deterministicReport": "DETERMINISTIC_EVIDENCE_REPORT_V1",
+      "failureTaxonomy": "OPPORTUNITY_FAILURE_V1",
+      "fillPolicy": "JUPITER_ORDER_QUOTE_AS_FILL_V1",
+      "followerLifecycle": "FOLLOWER_ROUND_TRIPS_V2",
+      "followerOpportunityCopyability": "COPYABILITY_V1",
+      "historicalEvaluation": "HISTORICAL_EVALUATION_V3",
+      "reliability": "LEADER_RELIABILITY_DIAGNOSTICS_V2",
+      "strategyMetrics": "STRATEGY_METRICS_V1",
+      "temporalCoverage": "LEADER_TEMPORAL_COVERAGE_V1",
+      "temporalPerformance": "LEADER_TEMPORAL_PERFORMANCE_V1"
+    },
+    "riskPolicyBinding": "EXACT_PERSISTED_APPROVED_EVALUATION_CONTEXT"
+  },
+  "diagnosticThresholds": {
+    "concentration": null,
+    "drawdown": null,
+    "executionRate": null,
+    "failureRate": null,
+    "profitFactorPerformance": null,
+    "temporalStability": null,
+    "winRate": null
+  },
+  "expectancyRule": {
+    "comparison": "CANONICAL_EXACT_DECIMAL",
+    "epsilon": null,
+    "negative": "NEGATIVE_EXPECTANCY",
+    "positive": "POSITIVE_CANDIDATE",
+    "zero": "INSUFFICIENT_EVIDENCE"
+  },
+  "metricConsistency": {
+    "conflictReason": "METRIC_CONSISTENCY_CONFLICT",
+    "directionalProfitFactorConsistencyRequired": true,
+    "profitFactorIndependentThreshold": null,
+    "required": true
+  },
+  "minimumFullyContainedCompletedCycles": 30,
+  "nonBlockingLimitations": [
+    "LEADER_ECONOMIC_EVIDENCE_UNAVAILABLE",
+    "STATISTICAL_RELIABILITY_NOT_ESTABLISHED",
+    "DEPENDENCE_NOT_MODELED",
+    "HEAVY_TAIL_BEHAVIOR_NOT_CALIBRATED",
+    "IID_CONFIDENCE_INTERVAL_NOT_AVAILABLE",
+    "REAL_DATA_CALIBRATION_REQUIRED",
+    "TOP_K_TRADE_DOMINANCE_NOT_AVAILABLE",
+    "TRADE_DOMINANCE_PARTIAL",
+    "TEMPORAL_STABILITY_NOT_ESTABLISHED",
+    "OPTIONAL_DIAGNOSTIC_UNAVAILABLE",
+    "NO_INDEPENDENT_DIAGNOSTIC_RATE_THRESHOLD"
+  ],
+  "policyVersion": "FOLLOWER_STRATEGY_VERDICT_POLICY_V1",
+  "reasonPrecedence": [
+    "POLICY_NOT_APPROVED",
+    "ARTIFACT_INTEGRITY_FAILURE",
+    "DEFINITION_VERSION_MISMATCH",
+    "PROVENANCE_MISMATCH",
+    "CONTEXT_MISMATCH",
+    "WINDOW_MISMATCH",
+    "CONFLICTING_CANDIDATE",
+    "LIMITED_EVIDENCE",
+    "PARTIAL_REQUIRED_EVIDENCE",
+    "REQUIRED_BLOCKING_EVIDENCE_UNAVAILABLE",
+    "VERDICT_SAMPLE_BELOW_MINIMUM",
+    "CENSORED_LIFECYCLE_EVIDENCE",
+    "COHORT_DEFINITION_MISMATCH",
+    "COHORT_PROVENANCE_MISMATCH",
+    "COST_EVIDENCE_BLOCKING",
+    "COST_INCOMPLETE_DIRECTION_NOT_PRESERVED",
+    "EXECUTION_DENOMINATOR_INCONSISTENT",
+    "FAILURE_TAXONOMY_INCONSISTENT",
+    "RELIABILITY_EVIDENCE_INSUFFICIENT",
+    "METRIC_CONSISTENCY_CONFLICT",
+    "FOLLOWER_PAPER_EXPECTANCY_ZERO",
+    "FOLLOWER_PAPER_EXPECTANCY_NEGATIVE_COSTS_INCOMPLETE_MONOTONE",
+    "FOLLOWER_PAPER_EXPECTANCY_NEGATIVE",
+    "FOLLOWER_PAPER_EXPECTANCY_POSITIVE_CANDIDATE"
+  ],
+  "reliabilityPolicy": {
+    "notEstablishedBlocks": false,
+    "requiredBindings": "PRESENT_AND_INTERNALLY_CONSISTENT",
+    "requiredLimitationCode": "STATISTICAL_RELIABILITY_NOT_ESTABLISHED"
+  },
+  "schemaVersion": "FOLLOWER_STRATEGY_VERDICT_POLICY_SCHEMA_V1",
+  "scope": {
+    "bucketFields": [
+      "followerWallet",
+      "leaderWallet",
+      "quoteMint"
+    ],
+    "expectancyMetric": "netQuoteExpectancy",
+    "metricSemantics": "FOLLOWER_QUOTE_AS_FILL_REALIZED_PNL",
+    "mode": "PAPER",
+    "prohibitedInputs": [
+      "LEADER_PNL",
+      "LEADER_ROI",
+      "LEADER_WIN_RATE",
+      "LEADER_COPYABILITY"
+    ],
+    "subject": "FOLLOWER_STRATEGY"
+  }
+}

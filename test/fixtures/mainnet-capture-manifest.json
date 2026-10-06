@@ -1,0 +1,15 @@
+{
+  "network": "mainnet-beta",
+  "capturedAt": "2026-08-21T13:53:00Z",
+  "rpc": "public read-only RPC; endpoint intentionally not required by tests",
+  "records": [
+    { "name": "jupiterBuy", "signature": "26t1fGocdKT3q7WqRJoxb8moj1f9tPXuvxLQkmabMQ2Q2tFXhesRGpDCT5AyukNubBkZzXbYKaZ1xphDHkbSUDjE", "slot": "440699769" },
+    { "name": "jupiterSell", "signature": "5qnbnCeX1cqPTXid2vCE2KfpHqajnyQvx2Ys2ETThDoT5njJ2HnandpJxcr3G6po8ydQo85x1sfhqhZ1jtWHsDxv", "slot": "440699769" },
+    { "name": "raydiumBuy", "signature": "4ZWrN9qWzhqvev7H92FXanhvVHtRize1mTwQBwoiBSNhVWt1Ax9HvQpUSJEPhJW5wao9FwmB9VmQ1Romz1Y8aU3", "slot": "440699947" },
+    { "name": "raydiumSell", "signature": "wjqL7xDtUaT5q8WC9tSQea4DyPJXPPhNbasqWwmULsy4KiMUVDyZY9k3nwpQAnzMAxvuF7HmhG1nX97ri64uNDd", "slot": "440700052" },
+    { "name": "pumpFunBuy", "signature": "4hYJCV7UzeoBkUMgoBbCehPf9eWLHpNHcfnq4q66mdoNwVoqsJ2SX3QTJBSsEzqRJp5iSAr7rfSVaSbFT23N5ry1", "slot": "440699772" },
+    { "name": "pumpFunSell", "signature": "GGKoveRNVdtViSpduqqCG47fNZZ5Aa1gg9PaCt5J8f1Bht64bibLSRXkmzR37wtQHo7CzFGxMpYUDCanCFK94vy", "slot": "440699968" },
+    { "name": "pumpSwapBuy", "signature": "4qzwgeCj3LAc86rMMbzwdsYex3TL7GcpfHQsyGDESqJuZU29sHsh1B5no5XPmkAcUcnbh83X4vGNcwTVGWu3n3QZ", "slot": "440699953" },
+    { "name": "pumpSwapSell", "signature": "4LDRTFeeH6hXDEXCVUh4T7cnKn8U6kaA8zRaiZiifCGfyqiQh1emYV7ZRxDP1Xz8M8pxKra3Nbfae48T9Kowe8WQ", "slot": "440700059" }
+  ]
+}

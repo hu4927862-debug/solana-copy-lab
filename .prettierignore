@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+var
+reports
+pnpm-lock.yaml
+test/fixtures/mainnet-capture-manifest.json
+config/research/follower-strategy-verdict-policy-v1.json

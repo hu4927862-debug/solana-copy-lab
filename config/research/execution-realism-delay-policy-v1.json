@@ -1,0 +1,6 @@
+{
+  "policyVersion": "EXECUTION_REALISM_DELAY_POLICY_V1",
+  "referenceTimestamp": "FIRST_SCHEMA_VALID_QUOTE_RESPONSE_TIMESTAMP",
+  "delayOffsetsMs": [3000, 10000],
+  "requestSemantics": "IDENTICAL_CANONICAL_EXACT_INPUT_NO_TAKER"
+}

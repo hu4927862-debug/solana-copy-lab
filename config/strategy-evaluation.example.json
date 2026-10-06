@@ -1,0 +1,27 @@
+{
+  "databasePath": "./var/copy-trading.sqlite",
+  "outputDirectory": "./reports/strategy-evaluation-v1",
+  "repositoryCommit": "REPLACE_WITH_EXACT_GIT_COMMIT",
+  "windowStartMs": 0,
+  "windowEndMs": 1,
+  "source": "EXPLICIT_IMMUTABLE_SQLITE_SNAPSHOT",
+  "mode": "PAPER",
+  "copyRatioBps": 10000,
+  "riskPolicyVersion": "REPLACE_WITH_PERSISTED_POLICY_VERSION",
+  "fillPolicyVersion": "JUPITER_ORDER_QUOTE_AS_FILL_V1",
+  "accountingPolicyVersion": "WEIGHTED_AVERAGE_V1",
+  "copyabilityDefinitionVersion": "COPYABILITY_V1",
+  "buckets": [
+    {
+      "followerWallet": "REPLACE_WITH_FOLLOWER_WALLET",
+      "leaderWallet": "REPLACE_WITH_LEADER_WALLET",
+      "quoteMint": "SOL_NATIVE"
+    }
+  ],
+  "historicalEvaluationPolicyInputs": {
+    "definitionVersion": "STRATEGY_METRICS_V1",
+    "minimumCompletedCycles": 20
+  },
+  "failureTaxonomyDefinitionVersion": "OPPORTUNITY_FAILURE_V1",
+  "temporalBlockCount": 4
+}

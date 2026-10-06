@@ -1,0 +1,24 @@
+name: Reproducible bug
+description: Report a sanitized offline counterexample
+title: "[bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Use synthetic inputs. Do not include credentials, private state, authorizations or signed transaction bytes."
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Command, commit, Node/pnpm versions and a sanitized fixture.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Offline test or error output

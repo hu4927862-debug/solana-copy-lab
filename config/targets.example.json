@@ -1,0 +1,10 @@
+{
+  "targets": [
+    {
+      "address": "7YttLkHDoNj9wyDur5ejbJjDkAxJecYtgHhnrv8kE2mQ",
+      "enabled": true,
+      "copyRatioBps": 1000,
+      "allowedQuoteAssets": ["SOL", "WSOL", "USDC", "USDT"]
+    }
+  ]
+}
